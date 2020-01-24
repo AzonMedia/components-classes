@@ -17,7 +17,7 @@ use GuzabaPlatform\Platform\Routes\Controllers\Routes;
 
 /**
  * Class Component
- * @package Azonmedia\Tags
+ * @package GuzabaPlatform\Classes
  */
 class Component extends BaseComponent implements ComponentInterface, ComponentInitializationInterface
 {
@@ -61,18 +61,18 @@ class Component extends BaseComponent implements ComponentInterface, ComponentIn
             'name'  => 'Classes',
             'meta' => [
                 'in_navigation' => TRUE, //to be shown in the admin navigation
-                'additional_template' => '@GuzabaPlatform.Classes/NavigationHook.vue',//here the list of classes will be expanded
+                'additional_template' => '@GuzabaPlatform.Classes/ClassesNavigationHook.vue',//here the list of classes will be expanded
             ],
         ];
-        $FrontendRouter->{'/admin'}->add('classes', '@GuzabaPlatform.Classes/Classes.vue' ,$additional);
+        $FrontendRouter->{'/admin'}->add('classes', '@GuzabaPlatform.Classes/ClassesAdmin.vue' ,$additional);
 
         $additional = [
             'name'  => 'Class method (action)',
             'meta' => [
-                'additional_template' => '@GuzabaPlatform.Classes/NavigationHook.vue',//here the list of classes will be expanded
+                'additional_template' => '@GuzabaPlatform.Classes/ClassesNavigationHook.vue',//here the list of classes will be expanded
             ],
         ];
-        $FrontendRouter->{'/admin'}->add('classes/:class/:method', '@GuzabaPlatform.Classes/Controllers.vue', $additional);
+        $FrontendRouter->{'/admin'}->add('classes/:class/:method', '@GuzabaPlatform.Classes/ControllersAdmin.vue', $additional);
     }
 
 }
