@@ -58,7 +58,7 @@ class Component extends BaseComponent implements ComponentInterface, ComponentIn
     {
         $FrontendRouter = self::get_service('FrontendRouter');
         $additional = [
-            'name'  => 'Classes',
+            'name'  => 'ActiveRecord Classes',
             'meta' => [
                 'in_navigation' => TRUE, //to be shown in the admin navigation
                 'additional_template' => '@GuzabaPlatform.Classes/ClassesNavigationHook.vue',//here the list of classes will be expanded
@@ -67,12 +67,13 @@ class Component extends BaseComponent implements ComponentInterface, ComponentIn
         $FrontendRouter->{'/admin'}->add('classes', '@GuzabaPlatform.Classes/ClassesAdmin.vue' ,$additional);
 
         $additional = [
-            'name'  => 'Class method (action)',
+            'name'  => 'ActiveRecord Class method (action)',
             'meta' => [
                 'additional_template' => '@GuzabaPlatform.Classes/ClassesNavigationHook.vue',//here the list of classes will be expanded
             ],
         ];
-        $FrontendRouter->{'/admin'}->add('classes/:class/:method', '@GuzabaPlatform.Classes/ControllersAdmin.vue', $additional);
+        //$FrontendRouter->{'/admin'}->add('classes/:class/:method', '@GuzabaPlatform.Classes/ClassesAdmin.vue', $additional);
+        $FrontendRouter->{'/admin'}->add('classes/:class', '@GuzabaPlatform.Classes/ClassesAdmin.vue', $additional);
     }
 
 }
