@@ -28,7 +28,7 @@ class Permissions extends BaseController
     protected const CONFIG_RUNTIME = [];
 
     /**
-     * Returns the permissions of a method of a class.
+     * Returns all the permissions of an ActiveRecord class.
      * A permission to execute the given method on a class means this can be executed on ony object from this class.
      * @param string $method_name
      */
