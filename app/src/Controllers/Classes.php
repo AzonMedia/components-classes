@@ -7,6 +7,11 @@ use Guzaba2\Http\Method;
 use GuzabaPlatform\Platform\Application\BaseController;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class Classes
+ * @package GuzabaPlatform\Classes\Controllers
+ * Provides a list/tree with the classes.
+ */
 class Classes extends BaseController
 {
     protected const CONFIG_DEFAULTS = [

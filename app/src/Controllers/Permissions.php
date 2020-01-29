@@ -8,6 +8,11 @@ use Guzaba2\Http\Method;
 use GuzabaPlatform\Platform\Application\BaseController;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class Permissions
+ * @package GuzabaPlatform\Classes\Controllers
+ * Returns the permissions of the chosen class.
+ */
 class Permissions extends BaseController
 {
 

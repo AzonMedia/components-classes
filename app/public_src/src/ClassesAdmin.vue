@@ -2,7 +2,6 @@
     <div class="crud">
         <div class="content">
             <div id="data" class="tab">
-                <h3 v-if="selectedClassNameShort!=''"> {{selectedClassNameShort}} crud operations <b-button variant="success" @click="showModal('post', newObject)" size="sm">Create New</b-button> </h3>
 
                 <template v-if="!selectedClassName">
                     <p>No class/method selected!</p>
@@ -28,7 +27,10 @@
                             table-hover
                             :busy.sync="isBusy_permissions"
                     >
-
+                        <template v-slot:[setSlotCell(action_name)]="row" v-for="(permission_uuid, action_name) in items_permissions[0].permissions">
+                            <b-form-checkbox :value="row.item.permissions[action_name] ? row.item.permissions[action_name] : 0" unchecked-value="" @change="togglePermission(row.item, action_name, row.item.permissions[action_name] ? 1 : 0)" v-model="row.item.permissions[action_name]"></b-form-checkbox>
+                        </template>
+<!--
                         <template v-slot:cell(create_granted)="row">
                             <b-form-checkbox :value="row.item.create_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'create')" v-model="row.item.create_granted"></b-form-checkbox>
                         </template>
@@ -52,7 +54,7 @@
                         <template v-slot:cell(revoke_permission_granted)="row">
                             <b-form-checkbox :value="row.item.revoke_permission_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'revoke_permission')" v-model="row.item.revoke_permission_granted"></b-form-checkbox>
                         </template>
-
+-->
                     </b-table>
                 </b-modal>
             </div>
@@ -103,7 +105,27 @@
                 items: [],
                 fields: [],
 
-                items_permissions:[],
+                items_permissions: [
+                    //must have a default even empty value to avoid the error on template load
+                    {
+                        permissions: [],
+                    }
+                ],
+                fields_permissions: [],
+                fields_permissions_base: [
+                    {
+                        key: 'role_id',
+                        label: 'Role ID',
+                        sortable: true
+                    },
+                    {
+                        key: 'role_name',
+                        label: 'Role Name',
+                        sortable: true
+                    },
+                ],
+                //items_permissions:[],
+                /*
                 fields_permissions:[
                     {
                         key: 'role_id',
@@ -146,6 +168,7 @@
                         sortable: true,
                     }
                 ],
+                */
                 title_permissions: "Permissions",
                 isBusy_permissions: false,
                 selectedObject: {},
@@ -154,6 +177,10 @@
             }
         },
         methods: {
+            // https://stackoverflow.com/questions/58140842/vue-and-bootstrap-vue-dynamically-use-slots
+            setSlotCell(action_name) {
+                return `cell(${action_name})`;
+            },
 
             resetParams(className){
                 this.currentPage = 1;
@@ -175,7 +202,16 @@
                 //this.$http.get('/admin/permissions-classes/' + class_name.split('\\').join('-') + '/' + method_name)
                 this.$http.get('/admin/permissions-classes/' + this.selectedClassName.split('\\').join('-') )
                     .then(resp => {
+                        //self.items_permissions = Object.values(resp.data.items);
                         self.items_permissions = Object.values(resp.data.items);
+                        self.fields_permissions = self.fields_permissions_base;//reset the columns
+                        for (let action_name in self.items_permissions[0].permissions) {
+                            self.fields_permissions.push({
+                                key: action_name,
+                                label: action_name,
+                                sortable: true,
+                            });
+                        }
                     })
                     .catch(err => {
                         console.log(err);
@@ -187,32 +223,61 @@
 
             },
 
-            tooglePermission(row, action){
+            togglePermission(row, action, checked){
                 this.isBusy_permission = true;
                 let sendValues = {};
                 let url = '/acl-permissions';
 
-                if (row[action + '_granted']) {
-                    let object_uuid = row[action + '_granted'];
+                //if (row[action + '_granted']) {
+                if (checked) {
+                    //let object_uuid = row[action + '_granted'];
+                    let object_uuid = row.permissions[action];
                     this.action = "delete";//http method
                     url += '/' + object_uuid;
                 } else {
-                    //console.log('ccccccccccccc');
                     this.action = "post";//http method
-
                     sendValues.role_id = row.role_id;
-                    //sendValues.object_id = this.selectedObject.meta_object_id;
                     sendValues.class_name = this.selectedClassName;
                     sendValues.action_name = action;
                     sendValues.object_id = null;
-                    //let class_name = this.selectedClassName.split('::')[0];
-                    //sendValues.class_name = class_name;
                 }
-                console.log('++++++++++++++++');
-                console.log(sendValues);
 
                 var self = this;
 
+                this.$http({
+                    method: this.action,
+                    url: url,
+                    //data: this.$stringify(sendValues)
+                    data: sendValues
+                })
+                    .then(resp => {
+                        this.$bvToast.toast(resp.data.message, {
+                            // title: '',
+                            autoHideDelay: 5000,
+                            variant: 'info',
+                            appendToast: true,
+                            solid: true,
+                            noCloseButton: true
+                        })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.$bvToast.toast(err.response.data.message, {
+                            // title: '',
+                            autoHideDelay: 5000,
+                            variant: 'info',
+                            appendToast: true,
+                            solid: true,
+                            noCloseButton: true
+                        })
+                        //self.requestError = err;
+
+                    })
+                    .finally(function(){
+                        self.showPermissions(self.selectedObject)
+                        self.isBusy_permission = false;
+                    });
+                /*
                 this.$http({
                     method: this.action,
                     url: url,
@@ -226,6 +291,7 @@
                     self.showPermissions(self.selectedObject)
                     self.isBusy_permission = false;
                 });
+                */
             }
         },
         props: {
@@ -233,19 +299,10 @@
         },
         watch:{
             $route (to, from) { // needed because by default no class is loaded and when it is loaded the component for the two routes is the same.
-                //console.log(this.$route.params.class);
-                //console.log(this.$route.params.method);
-                //this.selectedClassName = this.$route.params.class.split('-').join('\\') + '::' + this.$route.params.method;
                 this.selectedClassName = this.$route.params.class.split('-').join('\\');
-                //console.log(this.selectedClassName);
                 this.showPermissions(self.selectedClassName)
-                //console.log("ASD " + this.selectedClassName)
-                //this.getClassObjects(this.selectedClassName);
 
             }
-        },
-        mounted() {
-            //this.getClassObjects(this.contentArgs.selectedClassName.split('\\').join('.'));
         },
     };
 
