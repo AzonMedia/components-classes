@@ -1,7 +1,8 @@
 <template>
     <div>
         <!-- <tree-menu class="small" v-for="(node, index) in classes" :nodes="node" :label="index" :contentToLoad="loadClassMethod" :depth="1"></tree-menu> -->
-        <tree-menu class="small" v-for="(node, index) in classes" :nodes="node" :label="index" :contentToLoad="loadClass" :depth="1"></tree-menu>
+        <!-- nodes, label, contentToLoad, depth are variables passed to the nested component tree-menu -->
+        <tree-menu class="small" v-for="(node, index) in classes" v-bind:key="index" :nodes="node" :label="index" :contentToLoad="loadClass" :depth="1"></tree-menu>
     </div>
 </template>
 
@@ -37,7 +38,7 @@
         },
         created() {
             this.resetData();
-            var self = this;
+            let self = this;
             this.$http.get('/admin/classes')
                 .then(resp => {
                     self.classes = resp.data.tree;

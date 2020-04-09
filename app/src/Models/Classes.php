@@ -16,6 +16,7 @@ class Classes extends Base
      * Returns a tree of all ActiveRecord classes that are not controllers ActiveRecordController
      * @return array
      * @throws \ReflectionException
+     * @throws \Guzaba2\Base\Exceptions\InvalidArgumentException
      */
     public static function get_tree()
     {

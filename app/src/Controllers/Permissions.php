@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace GuzabaPlatform\Classes\Controllers;
 
 
+use Guzaba2\Base\Exceptions\RunTimeException;
 use Guzaba2\Http\Method;
 use GuzabaPlatform\Platform\Application\BaseController;
 use Psr\Http\Message\ResponseInterface;
@@ -30,7 +31,9 @@ class Permissions extends BaseController
     /**
      * Returns all the permissions of an ActiveRecord class.
      * A permission to execute the given method on a class means this can be executed on ony object from this class.
-     * @param string $method_name
+     * @param string $class_name
+     * @return ResponseInterface
+     * @throws RunTimeException
      */
     //public function main(string $method_name): ResponseInterface
     //public function main(string $class_name, string $method_name): ResponseInterface
