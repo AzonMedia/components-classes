@@ -65,9 +65,15 @@
 
 <script>
     import Hook from '@GuzabaPlatform.Platform/components/hooks/Hooks.vue'
-    import { stringify } from 'qs'
+    import ToastMixin from '@GuzabaPlatform.Platform/ToastMixin.js'
+
+    //import { stringify } from 'qs'
+
     export default {
         name: "ClassesAdmin",
+        mixins: [
+            ToastMixin,
+        ],
         components: {
             Hook
         },
@@ -215,7 +221,8 @@
                         }
                     })
                     .catch(err => {
-                        console.log(err);
+                        //console.log(err);
+                        this.show_toast(err)
                         self.requestError = err;
                         self.items_permissions = [];
                     }).finally(function(){

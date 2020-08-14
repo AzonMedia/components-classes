@@ -6,6 +6,7 @@ namespace GuzabaPlatform\Classes\Models;
 
 use Guzaba2\Authorization\Acl\Permission;
 use Guzaba2\Base\Base;
+use Guzaba2\Orm\ActiveRecord;
 use GuzabaPlatform\Platform\Application\MysqlConnectionCoroutine;
 
 class Permissions extends Base
@@ -91,7 +92,7 @@ LEFT JOIN
     ON
         acl_permissions.role_id = roles.role_id
     AND
-        acl_permissions.class_name = :class_name
+        acl_permissions.class_id = :class_id
     AND
         acl_permissions.object_id IS NULL
 LEFT JOIN
@@ -103,14 +104,17 @@ LEFT JOIN
     ON
         meta.meta_object_id = acl_permissions.permission_id
     AND
-        meta.meta_class_name = :meta_class_name
+        meta.meta_class_id = :meta_class_id
 -- WHERE
 --    (users.user_id IS NULL OR users.user_id = 1)
 ORDER BY
     roles.role_name
 ";
+//meta.meta_class_name = :meta_class_name
+//acl_permissions.class_name = :class_name
 
-        $data = $Connection->prepare($q)->execute(['class_name' => $class_name, 'meta_class_name' => Permission::class])->fetchAll();
+        //$data = $Connection->prepare($q)->execute(['class_name' => $class_name, 'meta_class_name' => Permission::class])->fetchAll();
+        $data = $Connection->prepare($q)->execute(['class_id' => ActiveRecord::get_class_id($class_name), 'meta_class_id' => Permission::get_class_id()])->fetchAll();
 
         $ret = [];
         $object_actions = $class_name::get_class_actions();
