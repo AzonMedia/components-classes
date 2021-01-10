@@ -32,27 +32,27 @@
                         </template>
 <!--
                         <template v-slot:cell(create_granted)="row">
-                            <b-form-checkbox :value="row.item.create_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'create')" v-model="row.item.create_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.create_granted" :unchecked-value="0" @change="togglePermission(row.item, 'create')" v-model="row.item.create_granted"></b-form-checkbox>
                         </template>
 
                         <template v-slot:cell(read_granted)="row">
-                            <b-form-checkbox :value="row.item.read_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'read')" v-model="row.item.read_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.read_granted" :unchecked-value="0" @change="togglePermission(row.item, 'read')" v-model="row.item.read_granted"></b-form-checkbox>
                         </template>
 
                         <template v-slot:cell(write_granted)="row">
-                            <b-form-checkbox :value="row.item.write_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'write')" v-model="row.item.write_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.write_granted" :unchecked-value="0" @change="togglePermission(row.item, 'write')" v-model="row.item.write_granted"></b-form-checkbox>
                         </template>
 
                         <template v-slot:cell(delete_granted)="row">
-                            <b-form-checkbox :value="row.item.delete_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'delete')" v-model="row.item.delete_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.delete_granted" :unchecked-value="0" @change="togglePermission(row.item, 'delete')" v-model="row.item.delete_granted"></b-form-checkbox>
                         </template>
 
                         <template v-slot:cell(grant_permission_granted)="row">
-                            <b-form-checkbox :value="row.item.grant_permission_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'grant_permission')" v-model="row.item.grant_permission_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.grant_permission_granted" :unchecked-value="0" @change="togglePermission(row.item, 'grant_permission')" v-model="row.item.grant_permission_granted"></b-form-checkbox>
                         </template>
 
                         <template v-slot:cell(revoke_permission_granted)="row">
-                            <b-form-checkbox :value="row.item.revoke_permission_granted" :unchecked-value="0" @change="tooglePermission(row.item, 'revoke_permission')" v-model="row.item.revoke_permission_granted"></b-form-checkbox>
+                            <b-form-checkbox :value="row.item.revoke_permission_granted" :unchecked-value="0" @change="togglePermission(row.item, 'revoke_permission')" v-model="row.item.revoke_permission_granted"></b-form-checkbox>
                         </template>
 -->
                     </b-table>
