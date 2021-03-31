@@ -234,7 +234,7 @@
             togglePermission(row, action, checked){
                 this.isBusy_permission = true;
                 let sendValues = {};
-                let url = '/acl-permissions';
+                let url = '/acl-permission';
 
                 //if (row[action + '_granted']) {
                 if (checked) {
